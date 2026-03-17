@@ -23,11 +23,6 @@ class AppColors {
   static const Color accentLight = Color(0xFF4DB6AC);
   static const Color accentDark = Color(0xFF00695C);
 
-  // 5. Muted — bordes, divisores, deshabilitado (3 opacidades sobre negro)
-  static const Color muted = Color(0xFF8B949E);
-  static const Color mutedLight = Color(0x4D8B949E); // 30%
-  static const Color mutedDark = Color(0x1A000000);  // 10%
-
   // 6. Chat: activo (online)
   static const Color chatActive = Color(0xFF4CAF50);
   static const Color chatActiveLight = Color(0xFF81C784);
