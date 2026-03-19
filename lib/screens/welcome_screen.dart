@@ -1,8 +1,9 @@
 import 'package:flow_chat/theme/app_assets.dart';
 import 'package:flow_chat/theme/app_colors.dart';
+import 'package:flow_chat/theme/app_routes.dart';
+import 'package:flow_chat/theme/app_text_style.dart';
 import 'package:flow_chat/widgets/button_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -28,12 +29,12 @@ class WelcomeScreen extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.05 ),
             Text('¡Bienvenido a Flow Chat!',
-              style: GoogleFonts.inter(fontSize: 23, fontWeight: FontWeight.w700, color: AppColors.text),
+              style: AppTextStyle.welcomeTitle,
             ),
             const SizedBox(height: 15),
             Text('Nos complace presentar Flow chat\nsencillo, rápido y la forma más práctica\nde hablar.',
               textAlign: TextAlign.center,
-              style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w300, color: AppColors.text),
+              style: AppTextStyle.welcomeSubtitle,
             ),
             const SizedBox(height: 30),
             Row(
@@ -43,7 +44,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 Text('Desarrollado por',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w300, color: AppColors.text),
+                  style: AppTextStyle.developerText,
                 ),
                 const Expanded(
                   child: Divider(color: AppColors.chatOfflineLight, thickness: 1, indent: 10)
@@ -65,7 +66,7 @@ class WelcomeScreen extends StatelessWidget {
                       Image.asset(AppAssets.githubLogo, width: 20),
                       const SizedBox(width: 5),
                       Text('Fabian',
-                          style: GoogleFonts.inter(fontSize: 15, color: AppColors.surfaceDark),
+                          style: AppTextStyle.githubName,
                       ),
                     ],
                   ),
@@ -73,7 +74,7 @@ class WelcomeScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: size.height *0.05),
-            ButtonStyles(text: 'Iniciar sesión', onTap: () => debugPrint('Usuario: iniciar sesión')),
+            ButtonStyles(text: 'Iniciar sesión', onTap: () => Navigator.pushNamed(context, AppRoutes.login)),
             const SizedBox(height: 20),
             ButtonStyles(text: 'Crear cuenta', twoStyle: true, onTap: () => debugPrint('Usuario: crear cuenta'),),
           ],

@@ -32,4 +32,9 @@ class AppColors {
   static const Color chatOffline = Color(0xFF9E9E9E);
   static const Color chatOfflineLight = Color(0xFFBDBDBD);
   static const Color chatOfflineDark = Color(0xFF616161);
+
+  // 8. Error — validaciones, mensajes de error, estados de error
+  static const Color error = Color(0xFFC62828);
+  static const Color errorLight = Color(0xFFEF5350);
+  static const Color errorDark = Color(0xFFB71C1C);
 }

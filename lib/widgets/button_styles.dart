@@ -1,6 +1,6 @@
 import 'package:flow_chat/theme/app_colors.dart';
+import 'package:flow_chat/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ButtonStyles extends StatelessWidget{
   final String text;
@@ -29,7 +29,7 @@ class ButtonStyles extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(text,
-              style: GoogleFonts.inter(fontSize: 15, color: twoStyle ? AppColors.primaryLight : AppColors.surfaceLight, fontWeight: FontWeight.w500),
+              style: twoStyle ? AppTextStyle.buttonTextSecondary : AppTextStyle.buttonTextPrimary,
             ),
           ],
         )
