@@ -35,11 +35,11 @@ Aquí puedes visualizar el flujo de la aplicación. Para añadir tus propias cap
 
 | Bienvenida | Login | Registro |
 | :---: | :---: | :---: |
-| ![Welcome Screen Placeholder](assets/screenshots/welcome.png) | ![Login Screen Placeholder](assets/screenshots/login.png) | ![Register Screen Placeholder](assets/screenshots/register.png) |
+| <img src="assets/screenshots/welcome.png" width="250"> | <img src="assets/screenshots/login.png" width="250"> | <img src="assets/screenshots/register.png" width="250"> |
 
-| Bandeja de Entrada | Pantalla de Chat | Perfil |
-| :---: | :---: | :---: |
-| ![Inbox Screen Placeholder](assets/screenshots/inbox.png) | ![Chat Screen Placeholder](assets/screenshots/chat.png) | ![Profile Screen Placeholder](assets/screenshots/profile.png) |
+| Bandeja de Entrada | Pantalla de Chat |
+| :---: | :---: |
+| <img src="assets/screenshots/inbox.png" width="250"> | <img src="assets/screenshots/chat.png" width="250"> |
 
 </div>
 
