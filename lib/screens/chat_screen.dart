@@ -54,8 +54,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60,
-        title: _buildAppBarTitle(user, name),
+        title: _ChatAppbarContent(user: user, name: name),
         elevation: 1,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(CupertinoIcons.chevron_left),
+        ),
       ),
       body: Column(
         children: [
@@ -77,19 +81,33 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       ),
     );
   }
+}
 
-  Row _buildAppBarTitle(User? user, String name) {
+class _ChatAppbarContent extends StatefulWidget {
+  final User? user;
+  final String name;
+  const _ChatAppbarContent({required this.user, required this.name});
+
+  @override
+  State<_ChatAppbarContent> createState() => _ChatAppbarContentState();
+}
+
+class _ChatAppbarContentState extends State<_ChatAppbarContent> {
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
-        if (user != null)
+        if (widget.user != null)
           UserAvatarStyle(
-            user: user,
+            user: widget.user!,
             radius: 22,
             showBadge: false,
             useAccentGradient: true,
+            profileStyle: true,
+            profileInitials: false,
           ),
         const SizedBox(width: 12),
-        Text(name, style: AppTextStyle.headingSmall),
+        Text(widget.name, style: AppTextStyle.headingSmall),
       ],
     );
   }
@@ -217,42 +235,39 @@ class ChatSubmitAction extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4.0),
       child: Platform.isIOS
-      ? CupertinoButton(
-          onPressed: isTextEmpty
-              ? null
-              : () => _handleSubmit(controller.text),
-          child: isTextEmpty
-              ? Icon(
-                  Icons.add_circle_outline,
-                  color: AppColors.chatOffline,
-                  size: 21,
-                )
-              : Text(
-                  'Enviar',
-                  style: AppTextStyle.chatSendButton,
-                ),
-        )
-      : Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: IconButton(
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            icon: isTextEmpty
-                ? Icon(
-                    Icons.add_circle_outline,
-                    color: AppColors.chatOffline,
-                    size: 25,
-                  )
-                : Icon(
-                    CupertinoIcons.paperplane,
-                    color: AppColors.primaryDark,
-                    size: 25,
-                  ),
-            onPressed: isTextEmpty
-                ? null
-                : () => _handleSubmit(controller.text),
-          ),
-        ),
+          ? CupertinoButton(
+              onPressed: isTextEmpty
+                  ? null
+                  : () => _handleSubmit(controller.text),
+              child: isTextEmpty
+                  ? Icon(
+                      Icons.add_circle_outline,
+                      color: AppColors.chatOffline,
+                      size: 21,
+                    )
+                  : Text('Enviar', style: AppTextStyle.chatSendButton),
+            )
+          : Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: IconButton(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                icon: isTextEmpty
+                    ? Icon(
+                        Icons.add_circle_outline,
+                        color: AppColors.chatOffline,
+                        size: 25,
+                      )
+                    : Icon(
+                        CupertinoIcons.paperplane,
+                        color: AppColors.primaryDark,
+                        size: 25,
+                      ),
+                onPressed: isTextEmpty
+                    ? null
+                    : () => _handleSubmit(controller.text),
+              ),
+            ),
     );
   }
 }

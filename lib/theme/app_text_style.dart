@@ -10,8 +10,20 @@ class AppTextStyle {
     color: AppColors.text,
   );
 
+  static TextStyle titleIos = GoogleFonts.inter(
+    fontSize: 25,
+    fontWeight: FontWeight.w700,
+    color: AppColors.text,
+  );
+
   static TextStyle subtitle = GoogleFonts.inter(
     fontSize: 18,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textLight,
+  );
+
+  static TextStyle subtitleIos = GoogleFonts.inter(
+    fontSize: 17,
     fontWeight: FontWeight.w500,
     color: AppColors.textLight,
   );
@@ -81,11 +93,16 @@ class AppTextStyle {
   static TextStyle appBarTitle = GoogleFonts.inter(
     fontSize: 30,
     fontWeight: FontWeight.w700,
-    color: AppColors.surfaceLight,
+    color: AppColors.primaryDark,
   );
 
   static TextStyle avatarInitials = GoogleFonts.inter(
     fontSize: 25,
+    fontWeight: FontWeight.w600,
+    color: AppColors.surfaceLight,
+  );
+  static TextStyle profileInitials = GoogleFonts.inter(
+    fontSize: 60,
     fontWeight: FontWeight.w600,
     color: AppColors.surfaceLight,
   );

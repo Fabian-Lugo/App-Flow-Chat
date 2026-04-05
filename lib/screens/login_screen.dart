@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flow_chat/widgets/logo_image.dart';
 import 'package:flow_chat/widgets/text_link.dart';
 import 'package:flutter/material.dart';
@@ -52,12 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Form(
               key: _key,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                padding: Platform.isIOS
+                    ? const EdgeInsets.symmetric(horizontal: 30)
+                    : const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 child: Column(
                   children: [
                     const _Header(),
                     SizedBox(height: 30),
-                    _inputFields(
+                    _InputFields(
                       emailController: _controllerEmail,
                       passwordController: _controllerPassword,
                     ),
@@ -71,10 +75,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: size.height * 0.195),
+                    Platform.isIOS
+                        ? SizedBox(height: size.height * 0.191)
+                        : SizedBox(height: size.height * 0.195),
                     ButtonStyles(text: 'Iniciar sesión', onTap: goNext),
                     const SizedBox(height: 10),
-                    const _registerFooter(),
+                    const _RegisterFooter(),
                   ],
                 ),
               ),
@@ -94,19 +100,29 @@ class _Header extends StatelessWidget {
     return Column(
       children: [
         LogoImage(),
-        Text('¡Bienvenido nuevamente!', style: AppTextStyle.title),
+        Platform.isIOS
+            ? Text('¡Bienvenido nuevamente!', style: AppTextStyle.titleIos)
+            : Text('¡Bienvenido nuevamente!', style: AppTextStyle.title),
         const SizedBox(height: 10),
-        Text('Continuemos donde lo dejaste', style: AppTextStyle.subtitle),
+        Platform.isIOS
+            ? Text(
+                'Continuemos donde lo dejaste',
+                style: AppTextStyle.subtitleIos,
+              )
+            : Text(
+                'Continuemos donde lo dejaste',
+                style: AppTextStyle.subtitle,
+              ),
       ],
     );
   }
 }
 
-class _inputFields extends StatelessWidget {
+class _InputFields extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
-  const _inputFields({
+  const _InputFields({
     required this.emailController,
     required this.passwordController,
   });
@@ -117,15 +133,16 @@ class _inputFields extends StatelessWidget {
       children: [
         InputStyle(
           title: 'Correo',
-          labelText: 'Ingrese correo',
+          hintText: 'Ingrese correo',
           controller: emailController,
           type: TextInputType.emailAddress,
-          useIcon: Icons.mail_outline_outlined,
+          useIcon: Icon(Icons.mail_outline_outlined),
+          readOnly: false,
         ),
         const SizedBox(height: 13),
         InputStylePassword(
           title: 'Contraseña',
-          labelText: 'Ingrese contraseña',
+          hintText: 'Ingrese contraseña',
           controller: passwordController,
         ),
       ],
@@ -133,8 +150,8 @@ class _inputFields extends StatelessWidget {
   }
 }
 
-class _registerFooter extends StatelessWidget {
-  const _registerFooter();
+class _RegisterFooter extends StatelessWidget {
+  const _RegisterFooter();
 
   @override
   Widget build(BuildContext context) {

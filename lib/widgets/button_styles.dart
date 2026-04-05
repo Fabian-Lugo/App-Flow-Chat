@@ -2,7 +2,7 @@ import 'package:flow_chat/theme/app_colors.dart';
 import 'package:flow_chat/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
-class ButtonStyles extends StatelessWidget{
+class ButtonStyles extends StatelessWidget {
   final String text;
   final bool twoStyle;
   final VoidCallback onTap;
@@ -24,15 +24,21 @@ class ButtonStyles extends StatelessWidget{
         decoration: BoxDecoration(
           color: twoStyle ? AppColors.surfaceLight : AppColors.primary,
           borderRadius: BorderRadius.circular(15),
-          border: twoStyle ? Border.all(color: AppColors.primary, width: 1) : null,
-        ), child: Row(
+          border: twoStyle
+              ? Border.all(color: AppColors.primary, width: 1)
+              : null,
+        ),
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(text,
-              style: twoStyle ? AppTextStyle.buttonSecondary : AppTextStyle.buttonPrimary,
+            Text(
+              text,
+              style: twoStyle
+                  ? AppTextStyle.buttonSecondary
+                  : AppTextStyle.buttonPrimary,
             ),
           ],
-        )
+        ),
       ),
     );
   }

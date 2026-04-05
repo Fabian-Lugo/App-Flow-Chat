@@ -67,18 +67,12 @@ class _InboxScreenState extends State<InboxScreen> {
         backgroundColor: AppColors.surfaceLight,
         elevation: 3,
       ),
-      body: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
+      body: _MainScrollBody(
+        refreshController: _refreshController,
         onRefresh: _onRefreshUsers,
-        header: ClassicHeader(
-          completeIcon: Icon(Icons.check, color: AppColors.accent),
-        ),
-        child: _MainScrollBody(
-          onlineUsers: onlineUsers,
-          users: users,
-          onTap: goChat,
-        ),
+        onlineUsers: onlineUsers,
+        users: users,
+        onTap: goChat,
       ),
     );
   }
@@ -94,9 +88,7 @@ class _InboxAppBarContent extends StatelessWidget {
     return Container(
       height: 60,
       width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -109,7 +101,7 @@ class _InboxAppBarContent extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.profile),
             icon: Icon(CupertinoIcons.person, size: 30),
           ),
         ],
@@ -119,11 +111,15 @@ class _InboxAppBarContent extends StatelessWidget {
 }
 
 class _MainScrollBody extends StatelessWidget {
+  final RefreshController refreshController;
+  final VoidCallback onRefresh;
   final List<User> users;
   final List<User> onlineUsers;
   final Function onTap;
 
   const _MainScrollBody({
+    required this.refreshController,
+    required this.onRefresh,
     required this.users,
     required this.onlineUsers,
     required this.onTap,
@@ -131,30 +127,43 @@ class _MainScrollBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      children: [
-        ConnectionStyles(state: ConnectionStateStyle.connected),
-        Align(
-          alignment: AlignmentGeometry.center,
-          child: Text('Amigos conectados', style: AppTextStyle.bodySmall),
+    return SmartRefresher(
+      controller: refreshController,
+      enablePullDown: true,
+      onRefresh: onRefresh,
+      header: ClassicHeader(
+        completeIcon: Icon(Icons.check, color: AppColors.accent),
+      ),
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(
+          parent: BouncingScrollPhysics(),
         ),
-        _ActiveFriendsSlider(onlineUsers: onlineUsers, onTap: onTap),
-        Padding(
-          padding: const EdgeInsets.only(left: 15, bottom: 10),
-          child: Align(
-            alignment: AlignmentGeometry.centerStart,
-            child: Text('Bandeja de entrada', style: AppTextStyle.headingSmall),
+        children: [
+          ConnectionStyles(state: ConnectionStateStyle.connected),
+          Align(
+            alignment: AlignmentGeometry.center,
+            child: Text('Amigos conectados', style: AppTextStyle.bodySmall),
           ),
-        ),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: users.length,
-          itemBuilder: (_, i) => _ChatUserTile(user: users[i], onTap: onTap),
-          separatorBuilder: (_, i) => Divider(),
-        ),
-      ],
+          _ActiveFriendsSlider(onlineUsers: onlineUsers, onTap: onTap),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, bottom: 10),
+            child: Align(
+              alignment: AlignmentGeometry.centerStart,
+              child: Text(
+                'Bandeja de entrada',
+                style: AppTextStyle.headingSmall,
+              ),
+            ),
+          ),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: users.length,
+            itemBuilder: (_, i) => _ChatUserTile(user: users[i], onTap: onTap),
+            separatorBuilder: (_, i) => Divider(),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -175,6 +184,8 @@ class _ChatUserTile extends StatelessWidget {
         radius: 25,
         showBadge: false,
         useAccentGradient: true,
+        profileStyle: false,
+        profileInitials: false,
       ),
       trailing: OnlineStatusBadge(isOnline: user.online, size: 12),
       onTap: () => onTap(user),
@@ -198,7 +209,7 @@ class _ActiveFriendsSlider extends StatelessWidget {
         itemCount: onlineUsers.length,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         itemBuilder: (_, i) {
-        final user = onlineUsers[i];
+          final user = onlineUsers[i];
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
             child: Column(
@@ -210,6 +221,9 @@ class _ActiveFriendsSlider extends StatelessWidget {
                     user: user,
                     radius: 35,
                     showBadge: true,
+                    useAccentGradient: false,
+                    profileStyle: false,
+                    profileInitials: false,
                   ),
                 ),
                 const SizedBox(height: 5),

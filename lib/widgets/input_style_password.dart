@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 
 class InputStylePassword extends StatefulWidget {
   final String title;
-  final String labelText;
+  final String hintText;
   final TextEditingController controller;
   final bool useIcon;
 
   const InputStylePassword({
     super.key,
     required this.title,
-    required this.labelText,
+    required this.hintText,
     required this.controller,
     this.useIcon = false,
   });
@@ -41,7 +41,7 @@ class _InputStylePasswordState extends State<InputStylePassword> {
           alignment: AlignmentGeometry.centerStart,
           child: Padding(
             padding: EdgeInsetsGeometry.only(bottom: 8),
-            child: Text(widget.title, style: AppTextStyle.inputsTitle,),
+            child: Text(widget.title, style: AppTextStyle.inputsTitle),
           ),
         ),
         TextFormField(
@@ -55,7 +55,7 @@ class _InputStylePasswordState extends State<InputStylePassword> {
             setState(() {});
           },
           decoration: InputDecoration(
-            hintText: widget.labelText,
+            hintText: widget.hintText,
             labelStyle: AppTextStyle.label,
             errorStyle: const TextStyle(height: 0.1, fontSize: 0),
             enabledBorder: InputStylesBorder.customBorder(

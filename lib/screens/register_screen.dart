@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:flow_chat/widgets/checkbox_terms_style.dart';
 import 'package:flow_chat/widgets/logo_image.dart';
 import 'package:flow_chat/widgets/text_link.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flow_chat/theme/app_text_style.dart';
 import 'package:flow_chat/theme/app_routes.dart';
 import 'package:flow_chat/widgets/input_style.dart';
@@ -61,7 +62,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Form(
                   key: _key,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                    padding: Platform.isIOS
+                        ? const EdgeInsets.symmetric(horizontal: 30)
+                        : const EdgeInsets.symmetric(
+                            horizontal: 30,
+                            vertical: 10,
+                          ),
                     child: Column(
                       children: [
                         const _Header(),
@@ -78,7 +84,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             aceptTerms = newValue!;
                           }),
                         ),
-                        SizedBox(height: size.height * 0.067),
+                        Platform.isIOS
+                            ? SizedBox(height: size.height * 0.05)
+                            : SizedBox(height: size.height * 0.067),
                         ButtonStyles(text: 'Crear cuenta', onTap: goNext),
                         const SizedBox(height: 10),
                         const _loginFooter(),
@@ -103,12 +111,19 @@ class _Header extends StatelessWidget {
     return Column(
       children: [
         LogoImage(),
-        Text('Únete a Flow Chat', style: AppTextStyle.title),
+        Platform.isIOS
+            ? Text('Únete a Flow Chat', style: AppTextStyle.titleIos)
+            : Text('Únete a Flow Chat', style: AppTextStyle.title),
         const SizedBox(height: 10),
-        Text(
-          'Crea una cuenta gratis en 30 segundos',
-          style: AppTextStyle.subtitle,
-        ),
+        Platform.isIOS
+            ? Text(
+                'Crea una cuenta gratis en 30 segundos',
+                style: AppTextStyle.subtitleIos,
+              )
+            : Text(
+                'Crea una cuenta gratis en 30 segundos',
+                style: AppTextStyle.subtitle,
+              ),
       ],
     );
   }
@@ -131,23 +146,25 @@ class _inputFields extends StatelessWidget {
       children: [
         InputStyle(
           title: 'Nombre',
-          labelText: 'Ingrese nombre completo',
+          hintText: 'Ingrese nombre completo',
           controller: nameController,
           type: TextInputType.text,
-          useIcon: Icons.person_2_outlined,
+          useIcon: Icon(Icons.person_2_outlined),
+          readOnly: false,
         ),
         const SizedBox(height: 13),
         InputStyle(
           title: 'Correo',
-          labelText: 'Ingrese correo',
+          hintText: 'Ingrese correo',
           controller: emailController,
           type: TextInputType.emailAddress,
-          useIcon: Icons.mail_outline_rounded,
+          useIcon: Icon(Icons.mail_outline_rounded),
+          readOnly: false,
         ),
         const SizedBox(height: 13),
         InputStylePassword(
           title: 'Contraseña',
-          labelText: 'Ingrese contraseña',
+          hintText: 'Ingrese contraseña',
           controller: passwordController,
         ),
       ],

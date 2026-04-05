@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flow_chat/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flow_chat/theme/app_text_style.dart';
@@ -8,9 +10,9 @@ class ChatMessage extends StatelessWidget {
   final AnimationController animationController;
 
   const ChatMessage({
-    required this.text, 
-    required this.uid, 
-    required this.animationController, 
+    required this.text,
+    required this.uid,
+    required this.animationController,
     super.key,
   });
 
@@ -19,13 +21,14 @@ class ChatMessage extends StatelessWidget {
     return FadeTransition(
       opacity: animationController,
       child: SizeTransition(
-        sizeFactor: CurvedAnimation(parent: animationController, curve: Curves.easeInOut),
-        child: Container(
-          child: uid == '123' 
-          ? _sendMessage() 
-          : _receiveMessage()
+        sizeFactor: CurvedAnimation(
+          parent: animationController,
+          curve: Curves.easeInOut,
         ),
-      )
+        child: Container(
+          child: uid == '123' ? _sendMessage() : _receiveMessage(),
+        ),
+      ),
     );
   }
 
@@ -36,7 +39,7 @@ class ChatMessage extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         margin: const EdgeInsets.only(bottom: 8, right: 8, left: 120),
         decoration: BoxDecoration(
-          color: AppColors.accent,
+          color: Platform.isIOS ? AppColors.primary : AppColors.primaryLight,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
@@ -55,7 +58,9 @@ class ChatMessage extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         margin: const EdgeInsets.only(bottom: 8, left: 8, right: 120),
         decoration: BoxDecoration(
-          color: AppColors.chatOffline,
+          color: Platform.isIOS
+              ? AppColors.darkTextSecondary
+              : AppColors.chatOffline,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
