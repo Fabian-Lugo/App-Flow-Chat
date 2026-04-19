@@ -1,8 +1,9 @@
-import 'package:flow_chat/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MessageScreen {
+import 'package:flow_chat/theme/app_colors.dart';
+
+class MessageFloat {
   static void show({
     required String text,
     required BuildContext context,
@@ -33,7 +34,7 @@ class _MessageScreen extends StatelessWidget {
   const _MessageScreen({
     required this.text,
     required this.icon,
-    required this.isError
+    required this.isError,
   });
 
   @override
@@ -47,8 +48,7 @@ class _MessageScreen extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             decoration: BoxDecoration(
-              color: isError ? AppColors.error :
-              AppColors.chatActive,
+              color: isError ? AppColors.error : AppColors.chatActive,
               borderRadius: BorderRadius.circular(
                 30,
               ), // Bordes bien redondeados
@@ -63,11 +63,7 @@ class _MessageScreen extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  icon,
-                  color: AppColors.surfaceLight,
-                  size: 24,
-                ),
+                Icon(icon, color: AppColors.surfaceLight, size: 24),
                 const SizedBox(width: 12),
                 Flexible(
                   child: Text(

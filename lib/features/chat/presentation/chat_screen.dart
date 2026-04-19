@@ -1,14 +1,15 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:flow_chat/models/user.dart';
 import 'package:flow_chat/theme/app_colors.dart';
 import 'package:flow_chat/theme/app_text_style.dart';
 import 'package:flow_chat/utils/input_styles_border.dart';
+import 'package:flow_chat/features/chat/widgets/user_avatar_style.dart';
 import 'package:flow_chat/features/chat/widgets/chat_message.dart';
-import 'package:flow_chat/widgets/user_avatar_style.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class ChatScreen extends StatefulWidget {
   final UserModel? user;

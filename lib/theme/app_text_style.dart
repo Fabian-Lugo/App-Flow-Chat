@@ -1,6 +1,7 @@
-import 'package:flow_chat/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:flow_chat/theme/app_colors.dart';
 
 class AppTextStyle {
   static TextStyle title = GoogleFonts.inter(

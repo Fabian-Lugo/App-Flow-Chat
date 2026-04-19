@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:flow_chat/theme/app_assets.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flow_chat/theme/app_assets.dart';
 
 class LogoImage extends StatelessWidget {
   const LogoImage({super.key});

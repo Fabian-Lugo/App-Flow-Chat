@@ -1,16 +1,19 @@
 import 'dart:io';
 
-import 'package:flow_chat/router/app_routes.dart';
-import 'package:flow_chat/utils/message_screen.dart';
-import 'package:flow_chat/features/auth/widgets/checkbox_terms_style.dart';
-import 'package:flow_chat/features/auth/widgets/logo_image.dart';
-import 'package:flow_chat/features/auth/widgets/text_link.dart';
 import 'package:flutter/material.dart';
-import 'package:flow_chat/theme/app_text_style.dart';
-import 'package:flow_chat/widgets/input_style.dart';
-import 'package:flow_chat/widgets/input_style_password.dart';
-import 'package:flow_chat/widgets/button_styles.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:flow_chat/router/app_routes.dart';
+import 'package:flow_chat/widgets/input_style.dart';
+import 'package:flow_chat/theme/app_text_style.dart';
+import 'package:flow_chat/utils/message_float.dart';
+import 'package:flow_chat/widgets/button_styles.dart';
+import 'package:flow_chat/features/auth/services/auth.dart';
+import 'package:flow_chat/widgets/input_style_password.dart';
+import 'package:flow_chat/features/auth/widgets/text_link.dart';
+import 'package:flow_chat/features/auth/widgets/logo_image.dart';
+import 'package:flow_chat/features/auth/widgets/checkbox_terms_style.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -24,7 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   final _key = GlobalKey<FormState>();
-  bool aceptTerms = false;
+  bool acceptTerms = false;
 
   void goNext() {
     final isFormValid = _key.currentState!.validate();
@@ -34,7 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    if (aceptTerms == false) {
+    if (acceptTerms == false) {
       _showMessage(
         text: 'No aceptaste los términos y políticas',
         isError: true,
@@ -42,7 +45,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    _handleSuccess();
+    _performRegister(
+      _controllerName.text.trim(),
+      _controllerEmail.text.trim(),
+      _controllerPassword.text.trim(),
+    );
+  }
+
+  void _performRegister(String name, String email, String password) async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final signUpResult = await authService.signUp(name, email, password);
+
+    if (signUpResult == SignUpResult.success) {
+      _handleSuccess();
+    } else {
+      final text = signUpResult == SignUpResult.emailAlreadyRegistered
+          ? 'Este correo ya está registrado. Inicia sesión con tu cuenta.'
+          : 'Registro fallido';
+      _showMessage(text: text, isError: true);
+    }
   }
 
   void _handleSuccess() {
@@ -51,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _showMessage({required String text, required bool isError}) {
-    MessageScreen.show(text: text, context: context, isError: isError);
+    MessageFloat.show(text: text, context: context, isError: isError);
   }
 
   @override
@@ -95,15 +116,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 15),
                         CheckboxTermsStyle(
-                          value: aceptTerms,
+                          value: acceptTerms,
                           onChanged: (bool? newValue) => setState(() {
-                            aceptTerms = newValue!;
+                            acceptTerms = newValue!;
                           }),
                         ),
                         Platform.isIOS
                             ? SizedBox(height: size.height * 0.05)
                             : SizedBox(height: size.height * 0.067),
-                        ButtonStyles(text: 'Crear cuenta', onTap: goNext),
+                        ButtonStyles(
+                          text: 'Crear cuenta',
+                          onTap: goNext,
+                          twoStyle: false,
+                        ),
                         const SizedBox(height: 10),
                         const _loginFooter(),
                       ],

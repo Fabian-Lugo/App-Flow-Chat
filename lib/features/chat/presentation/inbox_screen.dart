@@ -1,15 +1,16 @@
-import 'package:flow_chat/models/user.dart';
-import 'package:flow_chat/router/app_routes.dart';
-import 'package:flow_chat/theme/app_colors.dart';
-import 'package:flow_chat/theme/app_text_style.dart';
-import 'package:flow_chat/features/chat/widgets/connection_styles.dart';
-import 'package:flow_chat/features/chat/widgets/gradient_text.dart';
-import 'package:flow_chat/features/chat/widgets/online_status_badge.dart';
-import 'package:flow_chat/widgets/user_avatar_style.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import 'package:flow_chat/models/user.dart';
+import 'package:flow_chat/theme/app_colors.dart';
+import 'package:flow_chat/router/app_routes.dart';
+import 'package:flow_chat/theme/app_text_style.dart';
+import 'package:flow_chat/features/chat/widgets/user_avatar_style.dart';
+import 'package:flow_chat/features/chat/widgets/gradient_text.dart';
+import 'package:flow_chat/features/chat/widgets/connection_styles.dart';
+import 'package:flow_chat/features/chat/widgets/online_status_badge.dart';
 
 /// If [name] is longer than 8 characters, returns the first 8 plus "...".
 /// Otherwise returns the full [name] (nothing is cut).

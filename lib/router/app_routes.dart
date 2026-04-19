@@ -1,6 +1,7 @@
 abstract class AppRoutes {
   AppRoutes._();
   static const String welcome = '/welcome';
+  static const String loading = '/loading';
   static const String login = '/login';
   static const String register = '/register';
   static const String inbox = '/inbox';

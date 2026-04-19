@@ -1,10 +1,11 @@
-import 'package:flow_chat/router/app_routes.dart';
-import 'package:flow_chat/theme/app_assets.dart';
-import 'package:flow_chat/theme/app_colors.dart';
-import 'package:flow_chat/theme/app_text_style.dart';
-import 'package:flow_chat/widgets/button_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:flow_chat/theme/app_assets.dart';
+import 'package:flow_chat/theme/app_colors.dart';
+import 'package:flow_chat/router/app_routes.dart';
+import 'package:flow_chat/theme/app_text_style.dart';
+import 'package:flow_chat/widgets/button_styles.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -28,6 +29,7 @@ class WelcomeScreen extends StatelessWidget {
             ButtonStyles(
               text: 'Continuar',
               onTap: () => context.go(AppRoutes.login),
+              twoStyle: false,
             ),
           ],
         ),

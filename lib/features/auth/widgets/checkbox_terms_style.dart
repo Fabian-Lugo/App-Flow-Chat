@@ -1,15 +1,16 @@
+import 'package:flutter/material.dart';
+
 import 'package:flow_chat/theme/app_colors.dart';
 import 'package:flow_chat/theme/app_text_style.dart';
-import 'package:flutter/material.dart';
 
 class CheckboxTermsStyle extends StatelessWidget {
   final bool value;
   final ValueChanged<bool?> onChanged;
 
   const CheckboxTermsStyle({
-    required this.value, 
-    required this.onChanged, 
-    super.key
+    required this.value,
+    required this.onChanged,
+    super.key,
   });
 
   @override

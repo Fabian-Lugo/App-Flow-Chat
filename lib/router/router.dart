@@ -1,16 +1,22 @@
+import 'package:go_router/go_router.dart';
+
 import 'package:flow_chat/models/user.dart';
 import 'package:flow_chat/router/app_routes.dart';
 import 'package:flow_chat/features/chat/presentation/chat_screen.dart';
 import 'package:flow_chat/features/chat/presentation/inbox_screen.dart';
 import 'package:flow_chat/features/auth/presentation/login_screen.dart';
 import 'package:flow_chat/features/chat/presentation/profile_screen.dart';
-import 'package:flow_chat/features/auth/presentation/register_screen.dart';
+import 'package:flow_chat/features/auth/presentation/loading_screen.dart';
 import 'package:flow_chat/features/auth/presentation/welcome_screen.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flow_chat/features/auth/presentation/register_screen.dart';
 
 final router = GoRouter(
-  initialLocation: AppRoutes.welcome,
+  initialLocation: AppRoutes.loading,
   routes: [
+    GoRoute(
+      path: AppRoutes.loading,
+      builder: (context, state) => const LoadingScreen(),
+    ),
     GoRoute(
       path: AppRoutes.welcome,
       builder: (context, state) => const WelcomeScreen(),

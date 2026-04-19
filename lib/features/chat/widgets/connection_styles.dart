@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
+
 import 'package:flow_chat/theme/app_colors.dart';
 import 'package:flow_chat/theme/app_text_style.dart';
-import 'package:flutter/material.dart';
 
 enum ConnectionStateStyle { connected, disconnected, connecting }
 
@@ -23,17 +24,17 @@ class ConnectionStyles extends StatelessWidget {
         icon = Icons.wifi;
         text = 'Conectado';
         backgroundColor = AppColors.accentLight;
-      break;
+        break;
       case ConnectionStateStyle.disconnected:
         icon = Icons.wifi_off;
         text = 'Desconectado';
         backgroundColor = AppColors.errorLight;
-      break;
+        break;
       case ConnectionStateStyle.connecting:
         icon = Icons.sync;
         text = 'Conectando';
         backgroundColor = AppColors.text;
-      break;
+        break;
     }
 
     return AnimatedContainer(
@@ -47,12 +48,9 @@ class ConnectionStyles extends StatelessWidget {
         children: [
           Icon(icon, color: AppColors.surfaceLight, size: 15),
           const SizedBox(width: 5),
-          Text(
-            text,
-            style: AppTextStyle.statusSmall,
-          ),
+          Text(text, style: AppTextStyle.statusSmall),
         ],
-      ) 
+      ),
     );
   }
 }

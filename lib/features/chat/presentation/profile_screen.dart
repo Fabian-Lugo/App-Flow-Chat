@@ -1,15 +1,18 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:flow_chat/models/user.dart';
 import 'package:flow_chat/theme/app_colors.dart';
-import 'package:flow_chat/theme/app_text_style.dart';
 import 'package:flow_chat/router/app_routes.dart';
-import 'package:flow_chat/widgets/button_styles.dart';
 import 'package:flow_chat/widgets/input_style.dart';
-import 'package:flow_chat/widgets/user_avatar_style.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flow_chat/theme/app_text_style.dart';
+import 'package:flow_chat/widgets/button_styles.dart';
+import 'package:flow_chat/features/chat/widgets/user_avatar_style.dart';
+import 'package:flow_chat/features/auth/services/auth.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserModel? user;
@@ -24,14 +27,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     UserModel(uid: '1', name: 'Fabian', email: 'fabian@flow.com', online: true),
   ];
 
+  void _signOut() async {
+    AuthService.deleteToken();
+    context.go(AppRoutes.login);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final user = authService.user;
     return Scaffold(
       appBar: AppBar(
         title: const _AppBarTitle(),
         elevation: 1,
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
           icon: Icon(CupertinoIcons.chevron_left),
         ),
       ),
@@ -40,19 +50,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           children: [
             const SizedBox(height: 30),
-            _AvatarRow(users: users),
+            _AvatarRow(authService: authService),
             const SizedBox(height: 30),
-            Text(users[0].name, style: AppTextStyle.titleIos),
+            Text(user!.name, style: AppTextStyle.titleIos),
             const SizedBox(height: 10),
             Text('Información de perfil', style: AppTextStyle.subtitleIos),
             const SizedBox(height: 30),
-            _InfoFields(users: users),
+            _InfoFields(authService: authService),
             Platform.isIOS
                 ? SizedBox(height: MediaQuery.of(context).size.height * 0.16)
                 : SizedBox(height: MediaQuery.of(context).size.height * 0.25),
             ButtonStyles(
               text: 'Cerrar sesión',
-              onTap: () => context.go(AppRoutes.login),
+              onTap: _signOut,
+              twoStyle: false,
             ),
           ],
         ),
@@ -71,8 +82,8 @@ class _AppBarTitle extends StatelessWidget {
 }
 
 class _AvatarRow extends StatelessWidget {
-  final List<UserModel> users;
-  const _AvatarRow({required this.users});
+  final AuthService authService;
+  const _AvatarRow({required this.authService});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +91,7 @@ class _AvatarRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         UserAvatarStyle(
-          user: users[0],
+          user: authService.user!,
           radius: 80,
           showBadge: false,
           useAccentGradient: false,
@@ -93,22 +104,21 @@ class _AvatarRow extends StatelessWidget {
 }
 
 class _InfoFields extends StatefulWidget {
-  final List<UserModel> users;
-  const _InfoFields({required this.users});
+  final AuthService authService;
+  const _InfoFields({required this.authService});
 
   @override
   State<_InfoFields> createState() => _InfoFieldsState();
 }
 
 class _InfoFieldsState extends State<_InfoFields> {
-  bool isOnline = false;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         InputStyle(
           title: 'Correo',
-          hintText: widget.users[0].email,
+          hintText: widget.authService.user!.email,
           controller: TextEditingController(),
           type: TextInputType.text,
           useIcon: Icon(Icons.mail_outline_outlined),
@@ -117,10 +127,12 @@ class _InfoFieldsState extends State<_InfoFields> {
         const SizedBox(height: 13),
         InputStyle(
           title: 'Estado',
-          hintText: isOnline ? 'En línea' : 'Offline',
+          hintText: widget.authService.user!.online
+              ? 'En línea'
+              : 'Desconectado',
           controller: TextEditingController(),
           type: TextInputType.text,
-          useIcon: _iconOnline(isOnline),
+          useIcon: _iconOnline(widget.authService.user!.online),
           readOnly: true,
         ),
       ],

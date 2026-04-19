@@ -1,15 +1,18 @@
 import 'dart:io';
 
-import 'package:flow_chat/router/app_routes.dart';
-import 'package:flow_chat/utils/message_screen.dart';
-import 'package:flow_chat/features/auth/widgets/logo_image.dart';
-import 'package:flow_chat/features/auth/widgets/text_link.dart';
 import 'package:flutter/material.dart';
-import 'package:flow_chat/theme/app_text_style.dart';
-import 'package:flow_chat/widgets/input_style.dart';
-import 'package:flow_chat/widgets/input_style_password.dart';
-import 'package:flow_chat/widgets/button_styles.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:flow_chat/router/app_routes.dart';
+import 'package:flow_chat/widgets/input_style.dart';
+import 'package:flow_chat/utils/message_float.dart';
+import 'package:flow_chat/theme/app_text_style.dart';
+import 'package:flow_chat/widgets/button_styles.dart';
+import 'package:flow_chat/features/auth/services/auth.dart';
+import 'package:flow_chat/widgets/input_style_password.dart';
+import 'package:flow_chat/features/auth/widgets/text_link.dart';
+import 'package:flow_chat/features/auth/widgets/logo_image.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,32 +28,40 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void goNext() {
     final isFormValid = _key.currentState!.validate();
+    FocusScope.of(context).unfocus();
 
     if (!isFormValid) {
       setState(() {});
       return;
     }
 
-    _performLogin();
+    _performLogin(
+      _controllerEmail.text.trim(),
+      _controllerPassword.text.trim(),
+    );
   }
 
-  void _performLogin() {
-    bool loginExitoso = true; // Backend Logic
+  void _performLogin(String email, String password) async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final signInResult = await authService.signIn(email, password);
 
-    if (loginExitoso) {
-      _handleSucces();
+    if (signInResult == SignInResult.success) {
+      _handleSuccess();
     } else {
-      _showMessages(text: 'Correo o contraseña incorrectos', isError: true);
+      final text = signInResult == SignInResult.invalidCredentials
+          ? 'Correo o contraseña incorrectos'
+          : 'No se pudo iniciar sesión. Intenta de nuevo.';
+      _showMessage(text: text, isError: true);
     }
   }
 
-  void _handleSucces() {
-    _showMessages(text: 'Iniciaste sesión', isError: false);
+  void _handleSuccess() {
+    _showMessage(text: 'Iniciaste sesión', isError: false);
     context.go(AppRoutes.inbox);
   }
 
-  void _showMessages({required String text, required bool isError}) {
-    MessageScreen.show(text: text, context: context, isError: isError);
+  void _showMessage({required String text, required bool isError}) {
+    MessageFloat.show(text: text, context: context, isError: isError);
   }
 
   @override
@@ -98,7 +109,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     Platform.isIOS
                         ? SizedBox(height: size.height * 0.191)
                         : SizedBox(height: size.height * 0.195),
-                    ButtonStyles(text: 'Iniciar sesión', onTap: goNext),
+                    ButtonStyles(
+                      text: 'Iniciar sesión',
+                      onTap: goNext,
+                      twoStyle: false,
+                    ),
                     const SizedBox(height: 10),
                     const _RegisterFooter(),
                   ],

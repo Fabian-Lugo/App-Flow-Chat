@@ -11,20 +11,16 @@ class UserModel {
     required this.online,
   });
 
-  factory UserModel.fromMap(Map<String, dynamic> json, String id) {
+  factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      uid: id, 
-      name: json['name'], 
-      email: json['email'], 
-      online: json['online']
+      uid: json['uid'],
+      name: json['name'],
+      email: json['email'],
+      online: json['online'],
     );
   }
-  
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'email': email,
-      'online': online
-    };
+
+  Map<String, dynamic> toJson() {
+    return {'uid': uid, 'name': name, 'email': email, 'online': online};
   }
 }
