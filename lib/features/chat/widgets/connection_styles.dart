@@ -8,10 +8,7 @@ enum ConnectionStateStyle { connected, disconnected, connecting }
 class ConnectionStyles extends StatelessWidget {
   final ConnectionStateStyle state;
 
-  const ConnectionStyles({
-    this.state = ConnectionStateStyle.connected,
-    super.key,
-  });
+  const ConnectionStyles({required this.state, super.key});
 
   @override
   Widget build(BuildContext context) {

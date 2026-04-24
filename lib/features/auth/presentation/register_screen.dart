@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flow_chat/services/socket.dart';
 import 'package:flow_chat/router/app_routes.dart';
 import 'package:flow_chat/widgets/input_style.dart';
-import 'package:flow_chat/theme/app_text_style.dart';
 import 'package:flow_chat/utils/message_float.dart';
+import 'package:flow_chat/theme/app_text_style.dart';
 import 'package:flow_chat/widgets/button_styles.dart';
 import 'package:flow_chat/features/auth/services/auth.dart';
 import 'package:flow_chat/widgets/input_style_password.dart';
@@ -54,10 +55,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _performRegister(String name, String email, String password) async {
     final authService = Provider.of<AuthService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context, listen: false);
     final signUpResult = await authService.signUp(name, email, password);
 
     if (signUpResult == SignUpResult.success) {
-      _handleSuccess();
+      _handleSuccess(socketService);
     } else {
       final text = signUpResult == SignUpResult.emailAlreadyRegistered
           ? 'Este correo ya está registrado. Inicia sesión con tu cuenta.'
@@ -66,8 +68,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  void _handleSuccess() {
+  void _handleSuccess(SocketService socketService) {
     _showMessage(text: 'Registro exitoso', isError: false);
+    socketService.connectSocket();
     context.go(AppRoutes.inbox);
   }
 

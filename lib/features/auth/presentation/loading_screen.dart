@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flow_chat/services/socket.dart';
 import 'package:flow_chat/theme/app_colors.dart';
 import 'package:flow_chat/theme/app_assets.dart';
 import 'package:flow_chat/router/app_routes.dart';
@@ -49,9 +50,11 @@ class _LoadingScreenState extends State<LoadingScreen>
 
   Future<void> _checkIfSignedIn() async {
     final authService = Provider.of<AuthService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context, listen: false);
     final isSignedIn = await authService.isSignedIn();
     if (!mounted) return;
     if (isSignedIn == true) {
+      socketService.connectSocket();
       context.go(AppRoutes.inbox);
     } else {
       context.go(AppRoutes.welcome);

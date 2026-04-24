@@ -5,8 +5,7 @@ abstract class ApiConfig {
 
 class ApiConfigProd implements ApiConfig {
   @override
-  String get baseUrl =>
-      'https://juliet-unspattered-nonobviously.ngrok-free.dev';
+  String get baseUrl => 'https://backend-flow-chat.onrender.com';
   @override
   String get environment => 'production';
 }

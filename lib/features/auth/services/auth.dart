@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:flow_chat/models/user.dart';
 import 'package:flow_chat/api/api_config.dart';
-import 'package:flow_chat/api/auth_endpoints.dart';
+import 'package:flow_chat/api/api_endpoints.dart';
 import 'package:flow_chat/models/sign_in_response.dart';
 import 'package:flow_chat/models/sign_up_response.dart';
 
@@ -35,14 +35,14 @@ class AuthService with ChangeNotifier {
   }
 
   Future<bool?> isSignedIn() async {
-    final url = Uri.parse('${config.baseUrl}${AuthEndpoints.refreshToken}');
+    final url = Uri.parse('${config.baseUrl}${ApiEndpoints.refreshToken}');
     final token = await getToken();
     try {
       final response = await http.get(
         url,
         headers: {
           'Content-Type': 'application/json',
-          'x-token': token as String,
+          'x-token': token ?? 'no-token',
         },
       );
 
@@ -63,7 +63,7 @@ class AuthService with ChangeNotifier {
 
   Future<SignInResult> signIn(String email, String password) async {
     final payload = {'email': email, 'password': password};
-    final url = Uri.parse('${config.baseUrl}${AuthEndpoints.signIn}');
+    final url = Uri.parse('${config.baseUrl}${ApiEndpoints.signIn}');
 
     try {
       final response = await http.post(
@@ -97,7 +97,7 @@ class AuthService with ChangeNotifier {
     String password,
   ) async {
     final payload = {'name': name, 'email': email, 'password': password};
-    final url = Uri.parse('${config.baseUrl}${AuthEndpoints.signUp}');
+    final url = Uri.parse('${config.baseUrl}${ApiEndpoints.signUp}');
 
     try {
       final response = await http.post(

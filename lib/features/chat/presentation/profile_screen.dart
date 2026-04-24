@@ -6,13 +6,14 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flow_chat/models/user.dart';
+import 'package:flow_chat/services/socket.dart';
 import 'package:flow_chat/theme/app_colors.dart';
 import 'package:flow_chat/router/app_routes.dart';
 import 'package:flow_chat/widgets/input_style.dart';
 import 'package:flow_chat/theme/app_text_style.dart';
 import 'package:flow_chat/widgets/button_styles.dart';
-import 'package:flow_chat/features/chat/widgets/user_avatar_style.dart';
 import 'package:flow_chat/features/auth/services/auth.dart';
+import 'package:flow_chat/features/chat/widgets/user_avatar_style.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserModel? user;
@@ -23,11 +24,16 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final List<UserModel> users = [
-    UserModel(uid: '1', name: 'Fabian', email: 'fabian@flow.com', online: true),
-  ];
+  @override
+  void initState() {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    authService.isSignedIn();
+    super.initState();
+  }
 
   void _signOut() async {
+    final socketService = Provider.of<SocketService>(context, listen: false);
+    socketService.disconnectSocket();
     AuthService.deleteToken();
     context.go(AppRoutes.login);
   }
@@ -36,6 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final user = authService.user;
+
     return Scaffold(
       appBar: AppBar(
         title: const _AppBarTitle(),

@@ -7,12 +7,12 @@ import 'package:flow_chat/theme/app_text_style.dart';
 
 class ChatMessage extends StatelessWidget {
   final String text;
-  final String uid;
+  final bool isMe;
   final AnimationController animationController;
 
   const ChatMessage({
     required this.text,
-    required this.uid,
+    required this.isMe,
     required this.animationController,
     super.key,
   });
@@ -26,9 +26,7 @@ class ChatMessage extends StatelessWidget {
           parent: animationController,
           curve: Curves.easeInOut,
         ),
-        child: Container(
-          child: uid == '123' ? _sendMessage() : _receiveMessage(),
-        ),
+        child: Container(child: isMe ? _sendMessage() : _receiveMessage()),
       ),
     );
   }

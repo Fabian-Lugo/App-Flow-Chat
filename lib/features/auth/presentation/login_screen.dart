@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flow_chat/services/socket.dart';
 import 'package:flow_chat/router/app_routes.dart';
 import 'package:flow_chat/widgets/input_style.dart';
 import 'package:flow_chat/utils/message_float.dart';
@@ -43,10 +44,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _performLogin(String email, String password) async {
     final authService = Provider.of<AuthService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context, listen: false);
     final signInResult = await authService.signIn(email, password);
 
     if (signInResult == SignInResult.success) {
-      _handleSuccess();
+      _handleSuccess(socketService);
     } else {
       final text = signInResult == SignInResult.invalidCredentials
           ? 'Correo o contraseña incorrectos'
@@ -55,8 +57,9 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _handleSuccess() {
+  void _handleSuccess(SocketService socketService) {
     _showMessage(text: 'Iniciaste sesión', isError: false);
+    socketService.connectSocket();
     context.go(AppRoutes.inbox);
   }
 

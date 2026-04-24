@@ -1,11 +1,11 @@
-# Flow-chat 🚀
+# Flow-chat
 
 <p align="center">
   <img src="assets/images/mockup_v2.png" alt="Flow-chat Mockup" width="800">
 </p>
 
 <p align="center">
-  <b>La experiencia definitiva de mensajería en tiempo real.</b>
+  <b>Chat en tiempo real con Flutter: REST, sesión segura y WebSockets.</b>
 </p>
 
 ---
@@ -17,19 +17,19 @@
   <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" alt="Postman">
 </p>
 
-## ✨ Rediseño Visual (V2)
+## Rediseño visual (V2)
 
-Hemos actualizado la identidad visual de **Flow-chat** para reflejar una estética más moderna y fluida. La interfaz ahora cuenta con un sistema de tokens centralizado para colores y tipografía.
+La identidad de **Flow-chat** apuesta por una estética moderna y un sistema de tokens para colores y tipografía.
 
-| Nuevo Logo | Concepto |
+| Nuevo logo | Concepto |
 | :---: | :--- |
-| <img src="assets/icons/app_icon.png" width="120"> | **Identidad Dinámica**: Combinación de una burbuja de chat minimalista con ondas que representan el flujo constante de comunicación. |
+| <img src="assets/icons/app_icon.png" width="120"> | **Identidad dinámica**: burbuja de chat minimalista y ondas que representan el flujo de la conversación. |
 
 ---
 
-## 📸 Screenshots & Showcase
+## Capturas y flujo
 
-Aquí puedes visualizar el flujo de la aplicación. Para añadir tus propias capturas, reemplaza las rutas en los placeholders de abajo:
+Para usar tus propias imágenes, colócalas en `assets/screenshots/` o ajusta las rutas en las tablas siguientes.
 
 <div align="center">
 
@@ -37,66 +37,69 @@ Aquí puedes visualizar el flujo de la aplicación. Para añadir tus propias cap
 | :---: | :---: | :---: |
 | <img src="assets/screenshots/welcome.png" width="250"> | <img src="assets/screenshots/login.png" width="250"> | <img src="assets/screenshots/register.png" width="250"> |
 
-| Bandeja de Entrada | Pantalla de Chat |
+| Bandeja de entrada | Chat |
 | :---: | :---: |
 | <img src="assets/screenshots/inbox.png" width="250"> | <img src="assets/screenshots/chat.png" width="250"> |
 
 </div>
 
-> [!TIP]
-> Para usar tus propias capturas, guárdalas en la carpeta `assets/screenshots/` con los nombres correspondientes o edita las rutas en el archivo `README.md` (líneas 37-43).
+---
+
+## Sobre el proyecto
+
+**Flow-chat** es un cliente móvil (Flutter) para un backend de chat (API REST + MongoDB y canal en tiempo real vía **Socket.IO**). El renderizado de la UI y la organización del código priorizan claridad y evolución por features.
+
+### Pilares
+- **Fluidez**: transiciones y listas con buen rendimiento.
+- **Seguridad**: token almacenado con `flutter_secure_storage` y cabecera `x-token` en peticiones.
+- **Tiempo real**: conexión WebSocket con el mismo `baseUrl` que la API, autenticada con el token.
+- **Diseño**: `AppColors`, `AppTextStyle` y componentes reutilizables.
 
 ---
 
-## 📱 Sobre el Proyecto
+## Características principales
 
-**Flow-chat** no es solo una app de mensajería; es un ecosistema diseñado para la velocidad y la simplicidad. Desarrollada con las mejores prácticas de la industria, aprovecha el renderizado de alto rendimiento de **Flutter** y la escalabilidad de **MongoDB**.
-
-### 🎯 Pilares del Proyecto
-- **Fluidez**: Transiciones a 60fps y una UI intuitiva.
-- **Seguridad**: Autenticación síncrona y transparente.
-- **Robustez**: Backend verificado con suites de pruebas extensas.
-- **UI Premium**: Diseño centrado en el usuario con una paleta de colores vibrante y moderna.
+- **Mensajería**: historial por conversación (REST) y conexión en tiempo real (Socket.IO).
+- **Autenticación**: registro, inicio de sesión y comprobación de sesión (refresh) contra la API.
+- **Estado global**: `provider` con `AuthService`, `SocketService` y `MessagesService`.
+- **Navegación**: `go_router` — pantalla de carga inicial, bienvenida, login, registro, bandeja anidada con chat y perfil (ver [ARCHITECTURE.md](ARCHITECTURE.md)).
+- **Estructura por features**: `lib/features/<auth|chat>/` (presentación, widgets, servicios).
 
 ---
 
-## 🚀 Características Principales
+## Estructura del código
 
-- **⚡ Mensajería Instantánea**: Web sockets optimizados para baja latencia.
-- **🎨 Design System**: Estilos centralizados en `AppColors` y `AppTextStyle`.
-- **🔐 Auth Engine**: Sistema seguro de login y registro.
-- **☁️ Sync Cloud**: Todos tus chats siempre actualizados con MongoDB.
-- **🛠️ Arquitectura por features**: Pantallas bajo `lib/features/<auth|chat>/presentation/`, widgets por dominio y componentes compartidos en `lib/widgets/`.
-- **🧭 Navegación**: `go_router` con rutas centralizadas en `lib/router/`.
+La app se organiza por **funcionalidad** (auth, chat) y módulos transversales (`api`, `services`, `theme`, `models`, `router`). El detalle de carpetas, flujo de datos y convenciones está en **[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
 ---
 
-## 📐 Estructura del código
+## Configuración del backend
 
-La app sigue una **organización por funcionalidad** (auth, chat) más capas transversales (`theme`, `models`, `utils`, `router`). El detalle de carpetas, criterios para colocar widgets y el roadmap técnico están en **[ARCHITECTURE.md](ARCHITECTURE.md)**.
+La URL base del API y del socket se define en `lib/api/api_config.dart` (implementación de `ApiConfig`). Ajusta `baseUrl` al host donde expongas tu API antes de generar un build que vaya a dispositivos o tiendas.
+
+Endpoints relativos: ver `lib/api/api_endpoints.dart` (`/auth/signin`, `/auth/signup`, `/auth/refresh`, `/user/list`, `/messages/:userId`).
 
 ---
 
-## 🛠️ Cómo cambiar el Logo de Inicio
+## Icono de la app
 
-Para actualizar el icono de la aplicación en todas las plataformas (Android, iOS, Web) sigue estos pasos:
-
-1.  Reemplaza `assets/icons/app_icon.png` con tu nueva imagen.
-2.  Asegúrate de que `pubspec.yaml` tenga configurado el `flutter_launcher_icons`.
-3.  Ejecuta los siguientes comandos en tu terminal:
+1. Sustituye `assets/icons/app_icon.png` por tu recurso.
+2. Verifica en `pubspec.yaml` el bloque `icons_launcher` (el proyecto usa el paquete **icons_launcher**).
+3. En la raíz del proyecto:
 
 ```bash
 flutter pub get
-flutter pub run flutter_launcher_icons
+dart run icons_launcher:create
 ```
 
 ---
 
-## 🏁 Instalación Rápida
+## Instalación
 
-1.  **Clonar:** `git clone https://github.com/tu-usuario/Flow-chat.git`
-2.  **Dependencias:** `flutter pub get`
-3.  **Correr:** `flutter run`
+1. **Clonar** el repositorio.
+2. **Dependencias:** `flutter pub get`
+3. **Ajustar** `lib/api/api_config.dart` a tu API.
+4. **Ejecutar:** `flutter run`
 
 ---
 

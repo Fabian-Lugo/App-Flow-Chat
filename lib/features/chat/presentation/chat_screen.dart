@@ -2,12 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flow_chat/models/user.dart';
+import 'package:flow_chat/models/message.dart';
+import 'package:flow_chat/services/socket.dart';
 import 'package:flow_chat/theme/app_colors.dart';
 import 'package:flow_chat/theme/app_text_style.dart';
 import 'package:flow_chat/utils/input_styles_border.dart';
+import 'package:flow_chat/features/auth/services/auth.dart';
+import 'package:flow_chat/features/chat/services/messages.dart';
 import 'package:flow_chat/features/chat/widgets/user_avatar_style.dart';
 import 'package:flow_chat/features/chat/widgets/chat_message.dart';
 
@@ -22,21 +27,78 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final TextEditingController _controllerText = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-
+  late final SocketService socketService;
+  late final AuthService authService;
+  late final MessagesService messagesService;
   final List<ChatMessage> _messages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    socketService = Provider.of<SocketService>(context, listen: false);
+    authService = Provider.of<AuthService>(context, listen: false);
+    messagesService = Provider.of<MessagesService>(context, listen: false);
+    socketService.socket?.on('message', _listenToMessages);
+    _loadMessages(widget.user!.uid);
+  }
 
   @override
   void dispose() {
     for (ChatMessage message in _messages) {
       message.animationController.dispose();
     }
+    socketService.socket?.off('message');
     super.dispose();
+  }
+
+  void _loadMessages(String userId) async {
+    final List<MessageModel> messages = await messagesService.getMessagesByUser(
+      userId,
+    );
+    final List<ChatMessage> historyMessages = messages
+        .map(
+          (message) => ChatMessage(
+            text: message.message,
+            isMe: message.sender == authService.user?.uid,
+            animationController: AnimationController(
+              vsync: this,
+              duration: const Duration(milliseconds: 400),
+            ),
+          ),
+        )
+        .toList();
+
+    if (!mounted) return;
+
+    setState(() {
+      _messages.addAll(historyMessages);
+    });
+
+    for (final ChatMessage m in historyMessages) {
+      m.animationController.forward();
+    }
+  }
+
+  void _listenToMessages(dynamic payload) {
+    ChatMessage message = ChatMessage(
+      text: payload['text'],
+      isMe: payload['sender'] == authService.user!.uid,
+      animationController: AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 400),
+      ),
+    );
+
+    setState(() {
+      _messages.insert(0, message);
+      message.animationController.forward();
+    });
   }
 
   void _handleNewMessage(String text) {
     final newMessage = ChatMessage(
       text: text,
-      uid: '123',
+      isMe: true,
       animationController: AnimationController(
         vsync: this,
         duration: Duration(milliseconds: 400),
@@ -46,16 +108,28 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       _messages.insert(0, newMessage);
       newMessage.animationController.forward();
     });
+    socketService.socket?.emit('message', {
+      'text': text,
+      'sender': authService.user?.uid,
+      'receiver': widget.user?.uid,
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final String name = widget.user?.name ?? 'Usuario';
+    final String? currentUserUid = context.watch<AuthService>().user?.uid;
+    final UserModel? contact = widget.user;
+    String titleName = contact?.name ?? 'Usuario';
+    if (currentUserUid != null &&
+        contact != null &&
+        contact.uid == currentUserUid) {
+      titleName = '$titleName (Tú)';
+    }
 
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60,
-        title: _ChatAppbarContent(user: widget.user, name: name),
+        title: _ChatAppbarContent(user: widget.user, name: titleName),
         elevation: 1,
         leading: IconButton(
           onPressed: () => context.pop(),
